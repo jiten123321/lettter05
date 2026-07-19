@@ -460,6 +460,103 @@
     to{transform:translateY(118vh) translateX(var(--dx)) rotate(var(--rot))}
   }
 
+  /* ================= intro flow ================= */
+  .intro{position:fixed;inset:0;z-index:50}
+  .intro.done{display:none}
+
+  .screen{
+    position:fixed;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    padding:48px 24px 96px;
+    background:radial-gradient(120% 90% at 50% 12%, #3a1119 0%, #250a10 45%, #150609 100%);
+    opacity:0;visibility:hidden;pointer-events:none;
+    transform:translateY(22px);
+    transition:opacity .9s ease, transform .9s ease, visibility 0s linear .9s;
+    overflow:hidden;
+  }
+  .screen.active{
+    opacity:1;visibility:visible;pointer-events:auto;transform:none;
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .intro-inner{
+    position:relative;z-index:2;
+    width:100%;max-width:520px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+
+  /* welcome copy */
+  .welcome-title{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:500;
+    font-size:3rem;line-height:1;
+    color:var(--cream);
+    margin-bottom:22px;
+    text-shadow:0 2px 22px rgba(0,0,0,.5);
+  }
+  .welcome-msg{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.5rem;line-height:1.55;
+    color:var(--cream);
+    max-width:440px;margin:0 auto 16px;
+  }
+  .welcome-msg.soft{
+    font-size:1.28rem;
+    color:rgba(247,240,225,.72);
+  }
+
+  /* glitter rain */
+  .glitter-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .glit{
+    position:absolute;top:-6vh;
+    color:var(--gold-soft);
+    text-shadow:0 0 7px rgba(224,199,137,.9), 0 0 14px rgba(255,190,120,.5);
+    will-change:transform,opacity;
+    user-select:none;
+  }
+  @keyframes glitfall{
+    0%{transform:translateY(-6vh) translateX(0) rotate(0deg);opacity:0}
+    12%{opacity:1}
+    88%{opacity:1}
+    100%{transform:translateY(112vh) translateX(var(--gx,0)) rotate(300deg);opacity:0}
+  }
+
+  /* gif cards */
+  .gif-card{
+    width:100%;max-width:470px;margin:6px auto 4px;
+    border-radius:8px;overflow:hidden;
+    border:1px solid rgba(203,162,79,.45);
+    box-shadow:0 26px 64px rgba(0,0,0,.6), 0 0 46px 2px rgba(255,190,140,.16);
+    background:#150609;
+  }
+  .gif-card img{width:100%;display:block}
+  .cap{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:1.42rem;line-height:1.5;
+    color:var(--cream);
+    max-width:430px;margin:22px auto 0;
+    text-shadow:0 2px 14px rgba(0,0,0,.5);
+  }
+
+  .intro .btn{margin-top:28px}
+
+  /* progress dots */
+  .dots{
+    position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+    display:flex;gap:10px;z-index:3;
+  }
+  .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:rgba(224,199,137,.28);
+    transition:background .4s ease, transform .4s ease;
+  }
+  .dot.active{background:var(--gold-soft);transform:scale(1.35)}
+
+  /* hide the flower stage until the intro is finished */
+  body.pre-intro .stage,
+  body.pre-intro footer{opacity:0;pointer-events:none}
+
   @media (max-width:480px){
     .maison{font-size:2rem}
     .reveal h2{font-size:1.6rem}
@@ -467,6 +564,15 @@
     .note .greeting{font-size:1.9rem}
     .note p{font-size:1.28rem}
     .bouquet-wrap{height:360px}
+    .welcome-title{font-size:2.4rem}
+    .welcome-msg{font-size:1.32rem}
+    .welcome-msg.soft{font-size:1.18rem}
+    .cap{font-size:1.28rem}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .glit{animation:none !important;display:none}
+    .screen{transition:opacity .4s ease}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -479,7 +585,7 @@
   }
 </style>
 </head>
-<body>
+<body class="pre-intro">
 
 <!-- reusable rose + leaf art -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -544,6 +650,57 @@
     </symbol>
   </defs>
 </svg>
+
+<!-- ===================== intro flow ===================== -->
+<div class="intro" id="intro">
+
+  <!-- 0 · welcome + glitter rain -->
+  <section class="screen active" data-screen="0">
+    <div class="glitter-field" id="glitter" aria-hidden="true"></div>
+    <div class="intro-inner">
+      <div class="label" style="margin-bottom:20px">A little something, just from me</div>
+      <h1 class="welcome-title">Hello, you.</h1>
+      <p class="welcome-msg">I made all of this because I was missing you.</p>
+      <p class="welcome-msg soft">I was sitting alone in that little café, my coffee going cold, and my mind kept drifting back to you — until there was this quiet little urge to send you some flowers.</p>
+      <p class="welcome-msg soft">So I did. Come with me. 🌹</p>
+      <button class="btn next" data-next aria-label="Begin">Begin</button>
+    </div>
+  </section>
+
+  <!-- 1 · video3.gif -->
+  <section class="screen" data-screen="1">
+    <div class="intro-inner">
+      <div class="label" style="margin-bottom:16px">·  one  ·</div>
+      <figure class="gif-card"><img src="video3.gif" alt="A couple sharing a moment at sunset"></figure>
+      <p class="cap">Two people, one golden sunset — that's how you make the whole world feel to me.</p>
+      <button class="btn next" data-next>Next</button>
+    </div>
+  </section>
+
+  <!-- 2 · video45.gif -->
+  <section class="screen" data-screen="2">
+    <div class="intro-inner">
+      <div class="label" style="margin-bottom:16px">·  two  ·</div>
+      <figure class="gif-card"><img src="video45.gif" alt="Two hands gently holding"></figure>
+      <p class="cap">And when I think of you, it's the little things — like holding your hand and never wanting to let go.</p>
+      <button class="btn next" data-next>Next</button>
+    </div>
+  </section>
+
+  <!-- 3 · video.gif -->
+  <section class="screen" data-screen="3">
+    <div class="intro-inner">
+      <div class="label" style="margin-bottom:16px">·  three  ·</div>
+      <figure class="gif-card"><img src="video.gif" alt="A couple sitting together by the sea"></figure>
+      <p class="cap">I could sit beside you by the sea and let the whole world go quiet.</p>
+      <button class="btn next" data-finish>Now, your flowers →</button>
+    </div>
+  </section>
+
+  <div class="dots" id="dots" aria-hidden="true">
+    <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+  </div>
+</div>
 
 <div class="petal-field" id="petals" aria-hidden="true"></div>
 
@@ -616,6 +773,58 @@
 <footer>La Rose de Toi · fleuriste · delivered just because</footer>
 
 <script>
+/* ---------- intro flow: welcome + three gif pages ---------- */
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var intro   = document.getElementById('intro');
+  var screens = Array.prototype.slice.call(intro.querySelectorAll('.screen'));
+  var dots    = Array.prototype.slice.call(document.querySelectorAll('#dots .dot'));
+  var idx = 0;
+
+  function show(i){
+    screens[idx].classList.remove('active');
+    idx = i;
+    screens[idx].classList.add('active');
+    dots.forEach(function(d,n){ d.classList.toggle('active', n===idx); });
+    var top = screens[idx].querySelector('.intro-inner');
+    if(top) top.scrollTop = 0;
+  }
+
+  intro.addEventListener('click', function(e){
+    var t = e.target.closest('[data-next],[data-finish]');
+    if(!t) return;
+    if(t.hasAttribute('data-finish')){
+      intro.classList.add('done');
+      document.body.classList.remove('pre-intro');
+    } else if(idx < screens.length-1){
+      show(idx+1);
+    }
+  });
+
+  /* glitter rain on the welcome screen */
+  var glitter = document.getElementById('glitter');
+  var marks = ['✦','✧','✨','✹','·'];
+  function spawnGlit(initial){
+    if(reduce || !glitter || intro.classList.contains('done')) return;
+    var g = document.createElement('div');
+    g.className = 'glit';
+    g.textContent = marks[Math.floor(Math.random()*marks.length)];
+    g.style.fontSize = (8 + Math.random()*16) + 'px';
+    g.style.left = (Math.random()*100) + 'vw';
+    g.style.setProperty('--gx', (Math.random()*120-60) + 'px');
+    var dur = 5 + Math.random()*5;
+    var delay = initial ? Math.random()*5 : 0;
+    g.style.animation = 'glitfall ' + dur + 's linear ' + delay + 's forwards';
+    g.style.opacity = 0.5 + Math.random()*0.5;
+    glitter.appendChild(g);
+    setTimeout(function(){ g.remove(); }, (dur+delay)*1000 + 200);
+  }
+  if(!reduce && glitter){
+    for(var i=0;i<34;i++) spawnGlit(true);
+    setInterval(function(){ if(idx===0 && !intro.classList.contains('done')) spawnGlit(false); }, 260);
+  }
+})();
+
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var blooms = document.getElementById('blooms');
