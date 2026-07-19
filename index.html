@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>La Rose de Toi · A delivery for you</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -466,22 +466,25 @@
 
   .screen{
     position:fixed;inset:0;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
     text-align:center;
-    padding:48px 24px 96px;
+    padding:calc(40px + env(safe-area-inset-top)) 24px calc(88px + env(safe-area-inset-bottom));
     background:radial-gradient(120% 90% at 50% 12%, #3a1119 0%, #250a10 45%, #150609 100%);
     opacity:0;visibility:hidden;pointer-events:none;
     transform:translateY(22px);
     transition:opacity .9s ease, transform .9s ease, visibility 0s linear .9s;
-    overflow:hidden;
+    overflow-y:auto;overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
   }
   .screen.active{
     opacity:1;visibility:visible;pointer-events:auto;transform:none;
     transition:opacity .9s ease, transform .9s ease;
   }
+  /* auto margins center the content when it fits, but let it scroll when it doesn't */
   .intro-inner{
     position:relative;z-index:2;
     width:100%;max-width:520px;
+    margin:auto 0;
     display:flex;flex-direction:column;align-items:center;
   }
 
@@ -543,7 +546,7 @@
 
   /* progress dots */
   .dots{
-    position:fixed;left:50%;bottom:30px;transform:translateX(-50%);
+    position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translateX(-50%);
     display:flex;gap:10px;z-index:3;
   }
   .dot{
@@ -560,14 +563,25 @@
   @media (max-width:480px){
     .maison{font-size:2rem}
     .reveal h2{font-size:1.6rem}
-    .note{padding:50px 26px 40px}
+    .note{padding:50px 24px 40px}
     .note .greeting{font-size:1.9rem}
     .note p{font-size:1.28rem}
-    .bouquet-wrap{height:360px}
+    .bouquet-wrap{width:300px;height:340px}
+    .blooms{width:262px;height:262px}
     .welcome-title{font-size:2.4rem}
     .welcome-msg{font-size:1.32rem}
     .welcome-msg.soft{font-size:1.18rem}
     .cap{font-size:1.28rem}
+    .stage{padding:0 18px}
+    .gif-card{max-width:100%}
+  }
+
+  /* short viewports (landscape phones / small screens) */
+  @media (max-height:640px){
+    .welcome-title{font-size:2.1rem;margin-bottom:14px}
+    .welcome-msg{font-size:1.18rem;margin-bottom:12px}
+    .welcome-msg.soft{font-size:1.08rem}
+    .intro .btn{margin-top:20px}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -662,7 +676,6 @@
       <h1 class="welcome-title">Hello, Ladoo.</h1>
       <p class="welcome-msg">I made all of this because mera man kar raha tha tumhe flowers du.</p>
       <p class="welcome-msg soft">I was sitting alone in that café working on Zuno, but mera man bahut hua ki tumhe flowers du — koi aisa wajah nahi, bas dene ko man hua.</p>
-      <p class="welcome-msg soft">So I did. Come with me. 🌹</p>
       <button class="btn next" data-next aria-label="Begin">Begin</button>
     </div>
   </section>
